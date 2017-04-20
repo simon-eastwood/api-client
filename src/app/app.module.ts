@@ -21,8 +21,7 @@ import { WikiSmartComponent } from './wiki/wiki-smart.component';
     BrowserModule,
     FormsModule,
     HttpModule,
-    JsonpModule,
-    InMemoryWebApiModule.forRoot(HeroData)
+    JsonpModule
   ],
   declarations: [
     AppComponent,

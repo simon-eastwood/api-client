@@ -1,25 +1,35 @@
 import { Injectable } from '@angular/core';
-import { Jsonp, URLSearchParams } from '@angular/http';
+import { Http, BrowserXhr, Response, RequestOptions, Headers, Request, RequestMethod, URLSearchParams, Jsonp } from '@angular/http';
 
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class WikipediaService {
-  constructor(private jsonp: Jsonp) {}
+  private headers = new Headers();
+  constructor(private http: Http) { 
+    this.headers.append('Content-Type', 'application/json');
+        this.headers.append('X-Simon', 'dummy');
+    //this.headers.append('Origin', 'http://localhost:3000/');
+  }
 
-  search (term: string) {
+  search(term: string) {
 
-    let wikiUrl = 'http://en.wikipedia.org/w/api.php';
+// let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8', "Access-Control-Allow-Origin": "*", 'dataType': 'json', });
+  let options = new RequestOptions({ headers: this.headers });
 
-    let params = new URLSearchParams();
-    params.set('search', term); // the user's search value
-    params.set('action', 'opensearch');
-    params.set('format', 'json');
-    params.set('callback', 'JSONP_CALLBACK');
 
+
+    // let wikiUrl = 'http://en.wikipedia.org/w/api.php';
+    let wikiUrl = 'https://ops.epo.org/3.1/rest-services/published-data/search?q=' + term;
+  
+
+  console.log (options);
     // TODO: Add error handling
-    return this.jsonp
-               .get(wikiUrl, { search: params })
-               .map(response => <string[]> response.json()[1]);
+    return this.http.get(wikiUrl, options)
+      .map((res: Response) => {
+        if (res) {
+          return res.json();
+        }
+      });
   }
 }
