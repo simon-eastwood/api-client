@@ -15,7 +15,7 @@ export class WikipediaService {
   search(term: string) {
 
 // let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8', "Access-Control-Allow-Origin": "*", 'dataType': 'json', });
-  let options = new RequestOptions({ headers: this.headers });
+  let options = new RequestOptions({ headers: this.headers, withCredentials: true });
 
 
 
@@ -25,10 +25,11 @@ export class WikipediaService {
 
   console.log (options);
     // TODO: Add error handling
-    return this.http.get(wikiUrl, options)
+    return this.http.post(wikiUrl, 'nodata', options)
       .map((res: Response) => {
         if (res) {
-          return res.json();
+          let ans: Array<String> =[JSON.stringify(res.json())] ;
+          return ans;
         }
       });
   }
